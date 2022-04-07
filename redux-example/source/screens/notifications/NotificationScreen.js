@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { connect } from "react-redux";
-import { fetchDataAll } from "../../actions/app";
+import { fetchAllNotifications } from "../../actions/notifications";
 
-class Home extends Component {
+class NotificationScreen extends Component {
   componentDidMount() {
-    const { fetchDataAll } = this.props;
-    fetchDataAll();
+    const { fetchAllNotifications } = this.props;
+    fetchAllNotifications();
   }
   render() {
     const { data, navigation } = this.props;
@@ -16,19 +15,7 @@ class Home extends Component {
     }
     return (
       <View style={styles.container}>
-        <Text>Hello</Text>
-        <TouchableOpacity
-          onPress={() => navigation.push("Next")}
-          style={styles.button}
-        >
-          <Text>Dispatch Action</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.push("Next")}
-          style={styles.button}
-        >
-          <Text>Go to NEXT page</Text>
-        </TouchableOpacity>
+        <Text>Notifications</Text>
       </View>
     );
   }
@@ -53,12 +40,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    data: state.app.data,
+    data: state.devices.data,
   };
 };
 
 const mapDispatchToProps = {
-  fetchDataAll,
+  fetchAllNotifications,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationScreen);

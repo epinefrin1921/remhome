@@ -1,32 +1,19 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Provider } from "react-redux";
-import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import DeviceStack from "./screens/devices/DeviceNavigator";
+import NotificationScreen from "./screens/notifications/NotificationScreen";
 import Store from "./reduxStore";
-import HomePage from "./screens/home";
-import NextPage from "./screens/next";
-
-const Stack = createStackNavigator();
+import { DarkTheme } from "@react-navigation/native";
 
 export default function () {
   return (
     <View style={styles.flex}>
       <Provider store={Store}>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen
-              name="Home"
-              component={HomePage}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Next"
-              component={NextPage}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
+        <NavigationContainer theme={DarkTheme}>
+          <RootNavigator />
         </NavigationContainer>
       </Provider>
     </View>
@@ -38,3 +25,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+const Drawer = createDrawerNavigator();
+
+function RootNavigator() {
+  return (
+    <Drawer.Navigator initialRouteName="DevicesPage">
+      <Drawer.Screen
+        name="DevicesPage"
+        options={{ title: "Devices Tab" }}
+        component={DeviceStack}
+      />
+      <Drawer.Screen name="Notifications" component={NotificationScreen} />
+      {/*
+      <Drawer.Screen name="User" component={UserScreen} />
+      <Drawer.Screen name="Settings" component={SettingsScreen} /> */}
+    </Drawer.Navigator>
+  );
+}
