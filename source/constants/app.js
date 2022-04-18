@@ -1,5 +1,6 @@
-export const FETCH_ALL_DATA = "FETCH_ALL_DATA";
-export const FETCH_SINGLE_DATA = "FETCH_SINGLE_DATA";
+export const FETCH_ALL_DEVICES = "FETCH_ALL_DEVICES";
+export const FETCH_ALL_NOTIFICATIONS = "FETCH_ALL_NOTIFICATIONS";
+export const UPDATE_NOTIFICATION = "UPDATE_NOTIFICATION";
 
 export const Colors = {
   black: "#000000",

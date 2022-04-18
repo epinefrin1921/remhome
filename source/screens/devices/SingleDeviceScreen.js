@@ -1,31 +1,22 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, StatusBar, Text } from "react-native";
 import { connect } from "react-redux";
-import { fetchSingleDevice } from "../../actions/devices";
 import { Colors } from "../../constants/app";
 import DeviceWidget from "../../components/DeviceWidget";
 
-class SingleDeviceScreen extends Component {
-  componentDidMount() {
-    const { fetchSingleDevice } = this.props;
-    fetchSingleDevice(this.props.route.params.id);
-  }
-
-  renderDeviceData(device) {
-    return (
-      <View>
-        <DeviceWidget style={styles.widget} device={device}></DeviceWidget>
-        <Text style={styles.text}>OVDJE UBACITI GRAF</Text>
-      </View>
-    );
-  }
-
-  render = () => {
-    const { devices, navigation } = this.props;
-    let device = devices.device;
-    return <View>{device && this.renderDeviceData(device)}</View>;
-  };
-}
+const SingleDeviceScreen = ({ route, devices }) => {
+  const [device, setDevice] = useState({});
+  useEffect(() => {
+    const { itemId } = route.params;
+    setDevice(devices[itemId]);
+  }, []);
+  return (
+    <View>
+      <DeviceWidget style={styles.widget} device={device}></DeviceWidget>
+      <Text style={styles.text}>OVDJE UBACITI GRAF</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -39,12 +30,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    ...state,
+    devices: state.app.devices,
   };
 };
 
-const mapDispatchToProps = {
-  fetchSingleDevice,
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleDeviceScreen);

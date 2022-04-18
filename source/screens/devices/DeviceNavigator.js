@@ -14,7 +14,7 @@ function DeviceStack() {
         component={DeviceScreen}
       />
       <Stack.Screen
-        name="Device"
+        name="DeviceDetails"
         options={{ title: "Single Device" }}
         component={SingleDeviceScreen}
       />

@@ -1,47 +1,40 @@
-import React, { Component } from "react";
+import React, { useEffect } from "react";
 import { View, FlatList, StyleSheet, StatusBar } from "react-native";
 import { connect } from "react-redux";
 import { fetchAllDevices } from "../../actions/devices";
 import DeviceWidget from "../../components/DeviceWidget";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-class DeviceScreen extends Component {
-  componentDidMount() {
-    const { fetchAllDevices } = this.props;
-    fetchAllDevices();
-  }
+const DeviceScreen = ({ fetchAllDevices, devices, navigation }) => {
+  useEffect(() => fetchAllDevices(), []);
 
-  renderItem = ({ item, index, navigation }) => {
+  const onPressHandler = (index) => {
+    navigation.push("DeviceDetails", {
+      itemId: index,
+    });
+  };
+
+  const renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity
-        onPress={() => this.props.navigation.push("Device", { id: index })}
-      >
-        <DeviceWidget
-          style={styles.widget}
-          device={item}
-          key={index}
-        ></DeviceWidget>
+      <TouchableOpacity key={index} onPress={(e) => onPressHandler(index)}>
+        <DeviceWidget device={item} key={index}></DeviceWidget>
       </TouchableOpacity>
     );
   };
 
-  render() {
-    const { devices, navigation } = this.props;
-    let allDevices = devices.allDevices;
-    return (
-      <View style={styles.container}>
-        {allDevices && (
-          <FlatList
-            data={allDevices}
-            navigation={navigation}
-            renderItem={this.renderItem}
-            keyExtractor={(item) => item?.name}
-          />
-        )}
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container}>
+      {devices && (
+        <FlatList
+          data={devices}
+          navigation={navigation}
+          renderItem={renderItem}
+          keyExtractor={(item) => item?.name}
+        />
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -52,7 +45,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    ...state,
+    devices: state.app.devices,
   };
 };
 

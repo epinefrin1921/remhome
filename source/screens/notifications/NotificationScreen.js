@@ -1,51 +1,61 @@
-import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import { View, FlatList, StyleSheet, StatusBar } from "react-native";
 import { connect } from "react-redux";
-import { fetchAllNotifications } from "../../actions/notifications";
+import {
+  fetchAllNotifications,
+  updateNofication,
+} from "../../actions/notifications";
+import NotificationWidget from "../../components/NotificationWidget";
 
-class NotificationScreen extends Component {
-  componentDidMount() {
-    const { fetchAllNotifications } = this.props;
-    fetchAllNotifications();
-  }
-  render() {
-    const { data, navigation } = this.props;
-    if (data) {
-      console.log(data);
-    }
+const NotificationScreen = ({
+  fetchAllNotifications,
+  notifications,
+  navigation,
+  updateNofication,
+}) => {
+  useEffect(() => fetchAllNotifications(), []);
+
+  const renderItem = ({ item, index }) => {
     return (
-      <View style={styles.container}>
-        <Text>Notifications</Text>
-      </View>
+      <NotificationWidget
+        notification={item}
+        index={index}
+        key={index}
+        updateNofication={updateNofication}
+      ></NotificationWidget>
     );
-  }
-}
+  };
+
+  return (
+    <View style={styles.container}>
+      {notifications && (
+        <FlatList
+          data={notifications}
+          navigation={navigation}
+          renderItem={renderItem}
+          keyExtractor={(item) => item?.title}
+        />
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  button: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 20,
-    width: 200,
-    height: 100,
-    backgroundColor: "#ccc",
+    marginTop: StatusBar.currentHeight || 0,
   },
 });
 
 const mapStateToProps = (state) => {
   return {
-    data: state.devices.data,
+    notifications: state.app.notifications,
   };
 };
 
 const mapDispatchToProps = {
   fetchAllNotifications,
+  updateNofication,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationScreen);

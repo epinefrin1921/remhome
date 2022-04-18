@@ -30,7 +30,7 @@ const Drawer = createDrawerNavigator();
 
 function RootNavigator() {
   return (
-    <Drawer.Navigator initialRouteName="DevicesPage">
+    <Drawer.Navigator initialRouteName="Notifications">
       <Drawer.Screen
         name="DevicesPage"
         options={{ title: "Devices Tab" }}
